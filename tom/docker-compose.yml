@@ -3,11 +3,14 @@ version: '2'
 services:
   master:
     image: gettyimages/spark:latest
-    command: /usr/spark/bin/spark-class org.apache.spark.deploy.master.Master
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h master
     hostname: master
     environment:
-      SPARK_MASTER_HOST: spark://master
-      SPARK_MASTER_PORT: 7077    
+      MASTER: spark://master:7077
+      SPARK_CONF_DIR: /spark/conf
+      SPARK_PUBLIC_DNS: localhost
+    links:
+      - elasticsearch
     expose:
       - 7001
       - 7002
@@ -27,18 +30,17 @@ services:
 
   worker:
     image: gettyimages/spark:latest
-    command: /usr/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker
     environment:
+      SPARK_CONF_DIR: /spark/conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g
       SPARK_WORKER_PORT: 8881
       SPARK_WORKER_WEBUI_PORT: 8081
-      SPARK_MASTER_HOST: spark://master
-      SPARK_MASTER_PORT: 7077
+      SPARK_PUBLIC_DNS: localhost
     links:
       - master
-      - zeppelin
     expose:
       - 7012
       - 7013
