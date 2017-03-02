@@ -1,0 +1,9 @@
+[submodule "brian/spark-master"]
+	path = brian/spark-master
+	url = https://github.com/vandatud/docker-spark-master.git
+[submodule "brian/spark-worker"]
+	path = brian/spark-worker
+	url = https://github.com/vandatud/docker-spark-worker.git
+[submodule "brian/zeppelin"]
+	path = brian/zeppelin
+	url = https://github.com/vandatud/docker-zeppelin.git
