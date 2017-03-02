@@ -2,7 +2,7 @@ version: '2'
 
 services:
   master:
-    image: gettyimages/spark:latest
+    image: gettyimages/spark:2.1.0-hadoop-2.7
     command: bin/spark-class org.apache.spark.deploy.master.Master -h master
     hostname: master
     environment:
@@ -29,7 +29,7 @@ services:
       - vandacluster
 
   worker:
-    image: gettyimages/spark:latest
+    image: gettyimages/spark:2.1.0-hadoop-2.7
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker
     environment:
