@@ -19,7 +19,7 @@ services:
       - 7005
       - 7006
       - 7077
-      - 6066
+      - 6066      
     ports:
       - 4040:4040
       - 6066:6066
@@ -41,17 +41,16 @@ services:
       SPARK_PUBLIC_DNS: localhost
     links:
       - master
+      - elasticsearch
     expose:
       - 7012
       - 7013
       - 7014
       - 7015
       - 7016
-      - 8881
+      - 8881      
     ports:
       - 8081:8081
-    volumes:
-      - ./sparkworker/data:/sparkworker/data
     networks:
       - vandacluster
 
@@ -70,33 +69,32 @@ services:
     ports:
       - 8090:8090
       - 8091:8091
-    volumes:
-      - ./zeppelin/data:/zeppelin/data
     networks:
       - vandacluster
 
   elasticsearch:
-    build: elasticsearch/
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.1
+    hostname: elasticsearch
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - 9200:9200
+      - 9300:9300
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-      # disable X-Pack
-      # see https://www.elastic.co/guide/en/x-pack/current/xpack-settings.html
-      #     https://www.elastic.co/guide/en/x-pack/current/installing-xpack.html#xpack-enabling
       xpack.security.enabled: "false"
       xpack.monitoring.enabled: "false"
       xpack.graph.enabled: "false"
       xpack.watcher.enabled: "false"
+      path.repo: "/backup_elasticsearch"
+    volumes:
+      - D:/DockerVolumes/docker-cluster/tom/elasticsearch/data:/backup_elasticsearch
     networks:
       - vandacluster
+
   kibana:
-    build: kibana/
-    volumes:
-      - ./kibana/config/:/usr/share/kibana/config
+    image: docker.elastic.co/kibana/kibana:5.2.1
+    hostname: kibana
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - vandacluster
     depends_on:
