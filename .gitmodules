@@ -7,9 +7,3 @@
 [submodule "brian/zeppelin"]
 	path = brian/zeppelin
 	url = https://github.com/vandatud/docker-zeppelin.git
-[submodule "brian/elasticsearch"]
-	path = brian/elasticsearch
-	url = https://github.com/vandatud/docker-elasticsearch.git
-[submodule "brian/kibana"]
-	path = brian/kibana
-	url = https://github.com/vandatud/docker-kibana.git

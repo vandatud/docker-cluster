@@ -59,7 +59,7 @@ services:
     image: vandatud/zeppelin:latest
     hostname: zeppelin
     environment:
-      ZEPPELIN_PORT: 80
+      ZEPPELIN_PORT: 8090
       ZEPPELIN_JAVA_OPTS: "-Dspark.driver.port=5432"
       MASTER: spark://spark-master:7077
     links:
@@ -67,36 +67,34 @@ services:
     expose:
       - 5432
     ports:
-      - 8888:80
+      - 8090:8090
       - 8091:8091
     networks:
       - vanda-cluster
 
   elasticsearch:
-    build: elasticsearch/
-    image: vandatud/elasticsearch:latest
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.1
+    hostname: elasticsearch
     ports:
       - 9200:9200
       - 9300:9300
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-      # disable X-Pack
-      # see https://www.elastic.co/guide/en/x-pack/current/xpack-settings.html
-      #     https://www.elastic.co/guide/en/x-pack/current/installing-xpack.html#xpack-enabling
       xpack.security.enabled: "false"
       xpack.monitoring.enabled: "false"
       xpack.graph.enabled: "false"
       xpack.watcher.enabled: "false"
+      path.repo: "/backup_elasticsearch"
+    volumes:
+      - ./elasticsearch/data:/backup_elasticsearch
     networks:
       - vanda-cluster
 
   kibana:
-    build: kibana/
-    image: vandatud/kibana:latest
-    volumes:
-      - ./kibana/config/:/usr/share/kibana/config
+    image: docker.elastic.co/kibana/kibana:5.2.1
+    hostname: kibana
     ports:
-      - "5601:5601"
+      - 5601:5601
     networks:
       - vanda-cluster
     depends_on:
