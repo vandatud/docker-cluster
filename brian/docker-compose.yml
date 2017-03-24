@@ -73,25 +73,27 @@ services:
       - vanda-cluster
 
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.2
     hostname: elasticsearch
     ports:
       - 9200:9200
       - 9300:9300
     environment:
       ES_JAVA_OPTS: "-Xms1g -Xmx1g"
-      xpack.security.enabled: "false"
-      xpack.monitoring.enabled: "false"
-      xpack.graph.enabled: "false"
-      xpack.watcher.enabled: "false"
       path.repo: "/backup_elasticsearch"
+      cluster.name: "vanda-cluster"
+      # Disable xpack.security for testing
+      # xpack.security.enabled: "false"
+      # xpack.monitoring.enabled: "false"
+      # xpack.graph.enabled: "false"
+      # xpack.watcher.enabled: "false"
     volumes:
       - ./elasticsearch/data:/backup_elasticsearch
     networks:
       - vanda-cluster
 
   kibana:
-    image: docker.elastic.co/kibana/kibana:5.2.1
+    image: docker.elastic.co/kibana/kibana:5.2.2
     hostname: kibana
     ports:
       - 5601:5601

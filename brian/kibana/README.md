@@ -1,7 +1,6 @@
 # VANDA - Kibana Container
 
 _This readme is only intended for being part of the VANDA Deap Learning Stack!_ 
-
 Runs [Kibana 5.2.X](https://www.elastic.co/guide/en/kibana/5.2/index.html) from the official [docker.elastic.co/kibana/kibana](https://github.com/elastic/kibana-docker) docker image.
 
 ## Dockerfile

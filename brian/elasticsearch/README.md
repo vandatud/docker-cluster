@@ -1,7 +1,6 @@
 # VANDA - Elasticsearch Container
 
 _This readme is only intended for being part of the VANDA Deap Learning Stack!_ 
-
 Runs [Elasticsearch 5.2.X](https://www.elastic.co/guide/en/elasticsearch/reference/5.2/index.html) from the official [docker.elastic.co/elasticsearch/elasticsearch](https://github.com/elastic/elasticsearch-docker) docker image.
 
 ## Dockerfile
@@ -43,7 +42,7 @@ $ docker run -d -t -p 9200 -p 9300 --name vanda-elasticsearch_inst -v /path/to/l
 All following instructions are from [Elasticsearch References](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html)
 Now you must configure the Shared File System Repository in Elasticsearch:
 ```
-$ docker exec e46a689d75a8 curl -XPUT 'http://elasticsearch:9200/_snapshot/backup_elasticsearch' -d'
+$ docker exec e46a689d75a8 curl --user elastic:changeme -XPUT 'http://elasticsearch:9200/_snapshot/backup_elasticsearch' -d'
 {
     "type": "fs",
     "settings": {
@@ -55,7 +54,7 @@ $ docker exec e46a689d75a8 curl -XPUT 'http://elasticsearch:9200/_snapshot/backu
 
 Create a Snapshot with:
 ```
-$ docker exec e46a689d75a8 curl -XPUT 'http://elasticsearch:9200/_snapshot/backup_elasticsearch/vanda_articles?wait_for_completion=true' -d '
+$ docker exec e46a689d75a8 curl --user elastic:changeme -XPUT 'http://elasticsearch:9200/_snapshot/backup_elasticsearch/vanda_articles?wait_for_completion=true' -d '
 {
   "indices": "vanda_articles",
   "ignore_unavailable": true,
@@ -65,7 +64,7 @@ $ docker exec e46a689d75a8 curl -XPUT 'http://elasticsearch:9200/_snapshot/backu
 
 And restore Snapshot with:
 ```
-$ docker exec e46a689d75a8 curl -XPOST http://elasticsearch:9200/_snapshot/backup_elasticsearch/vanda_articles/_restore
+$ docker exec e46a689d75a8 curl --user elastic:changeme -XPOST http://elasticsearch:9200/_snapshot/backup_elasticsearch/vanda_articles/_restore
 ```
 
 
