@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  master:
+    image: gettyimages/spark:2.1.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h master
+    hostname: master
+    environment:
+      MASTER: spark://master:7077
+      SPARK_CONF_DIR: /spark/conf
+      SPARK_PUBLIC_DNS: localhost
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8080:8080
+    deploy:
+        replicas: 1
+        update_config:
+            parallelism: 1
+        restart_policy:
+            condition: on-failure
+        placement:
+            constraints:
+                - node.labels.spark-master == yes
+
+  worker:
+    image: gettyimages/spark:2.1.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
+    hostname: worker
+    environment:
+      SPARK_CONF_DIR: /spark/conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost
+    ports:
+      - 8081:8081
+    deploy:
+        replicas: 1
+        update_config:
+            parallelism: 1
+        restart_policy:
+            condition: on-failure
+        placement:
+            constraints:
+                - node.labels.spark-worker == yes
+
