@@ -20,9 +20,6 @@ services:
             parallelism: 1
         restart_policy:
             condition: on-failure
-        placement:
-            constraints:
-                - node.labels.spark-master == yes
 
   worker:
     image: gettyimages/spark:2.1.0-hadoop-2.7
@@ -43,7 +40,4 @@ services:
             parallelism: 1
         restart_policy:
             condition: on-failure
-        placement:
-            constraints:
-                - node.labels.spark-worker == yes
 
