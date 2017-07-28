@@ -38,6 +38,9 @@ services:
       SPARK_PUBLIC_DNS: localhost
     ports:
       - 8081:8081
+    expose:
+      - "7077"
+      - "8081-8095"
     deploy:
         replicas: 1
         update_config:
