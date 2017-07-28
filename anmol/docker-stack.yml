@@ -7,8 +7,8 @@ services:
     hostname: master
     environment:
       MASTER: spark://master:7077
-      SPARK_MASTER_HOST: 172.31.22.80
-      SPARK_LOCAL_IP: 172.31.22.80
+      SPARK_MASTER_HOST: 172.31.22.90
+      SPARK_LOCAL_IP: 172.31.22.90
       SPARK_CONF_DIR: /spark/conf
       SPARK_PUBLIC_DNS: localhost
     ports:
@@ -28,8 +28,8 @@ services:
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
     hostname: worker
     environment:
-      SPARK_MASTER_HOST: 172.31.22.80
-      SPARK_LOCAL_IP: 172.31.21.146
+      SPARK_MASTER_HOST: 172.31.22.90
+      SPARK_LOCAL_IP: 172.31.17.141
       SPARK_CONF_DIR: /spark/conf
       SPARK_WORKER_CORES: 2
       SPARK_WORKER_MEMORY: 1g
