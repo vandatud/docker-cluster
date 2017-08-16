@@ -1,0 +1,77 @@
+version: '3'
+
+networks:
+  spark:
+    driver: overlay
+
+services:
+  master:
+    image: gettyimages/spark:2.1.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.master.Master -h master
+    hostname: master
+    environment:
+      MASTER: spark://master:7077
+      SPARK_CONF_DIR: /spark/conf
+      SPARK_PUBLIC_DNS: localhost
+      SPARK_MASTER_WEBUI_PORT: 8080
+    ports:
+      - 4040:4040
+      - 6066:6066
+      - 7077:7077
+      - 8080:8080
+    depends_on:
+      - default
+    networks:
+      - spark
+    deploy:
+        replicas: 1
+        placement:
+          constraints:
+            - node.role == manager
+        update_config:
+            parallelism: 1
+        restart_policy:
+            condition: on-failure                
+
+  worker:
+    image: gettyimages/spark:2.1.0-hadoop-2.7
+    command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://master:7077
+    hostname: worker
+    depends_on:
+      - default
+      - master
+    environment:
+      SPARK_CONF_DIR: /spark/conf
+      SPARK_WORKER_CORES: 2
+      SPARK_WORKER_MEMORY: 1g
+      SPARK_WORKER_PORT: 8881
+      SPARK_WORKER_WEBUI_PORT: 8081
+      SPARK_PUBLIC_DNS: localhost 
+    networks:
+      - spark
+    ports:
+      - 8081:8081 
+      - 8881:8881
+    deploy:
+        mode: global
+        #replicas: 1
+        update_config:
+            parallelism: 1
+        restart_policy:
+            condition: on-failure                
+
+  spark-ui-proxy:
+    image: pschatzmann/spark-ui-proxy
+    command: master:8080 9006 
+    depends_on: 
+      - default
+      - master
+      - worker
+    ports:
+      - 9006:9006
+    networks:  
+       - spark
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager 
